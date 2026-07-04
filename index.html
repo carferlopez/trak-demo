@@ -1,0 +1,803 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, maximum-scale=1, user-scalable=no">
+<title>TRAK — La recuperación no se describe. Se ve.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg:#dde7e1;
+    --bg-soft:#eaf1ec;
+    --navy:#2a2e63;
+    --navy-soft:#5a5f92;
+    --muted:#6b7a90;
+    --mint:#c7f2ea;
+    --mint-strong:#8fe0d2;
+    --mint-line:#2a2e6322;
+    --teal:#22d3b8;
+    --white:#ffffff;
+    --font:'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;}
+  html,body{ height:100%; }
+  body{
+    font-family:var(--font);
+    background:var(--bg);
+    color:var(--navy);
+    min-height:100dvh;
+    -webkit-tap-highlight-color:transparent;
+    overflow-x:hidden;
+  }
+  img,svg{display:block;}
+  .hidden{display:none !important;}
+
+  /* ---------- DISCLOSURE BAR ---------- */
+  .disclosure-bar{
+    background:var(--navy);
+    color:#eafff9;
+    text-align:center;
+    font-size:11.5px;
+    letter-spacing:0.01em;
+    padding:8px 16px;
+    line-height:1.4;
+  }
+  .disclosure-bar b{ color:var(--teal); font-weight:600; }
+
+  /* ---------- HEADER / NAV ---------- */
+  header.site-nav{
+    display:flex;
+    align-items:center;
+    justify-content:space-between;
+    padding:18px clamp(16px,4vw,48px);
+    max-width:1280px;
+    margin:0 auto;
+    gap:16px;
+  }
+  .logo{
+    display:flex;
+    align-items:center;
+    gap:8px;
+    font-size:22px;
+    font-weight:700;
+    color:var(--navy);
+    letter-spacing:-0.01em;
+  }
+  .logo svg{ flex:none; }
+  .nav-links{
+    display:flex;
+    align-items:center;
+    gap:28px;
+    list-style:none;
+    font-size:14.5px;
+    font-weight:500;
+    color:var(--navy);
+  }
+  .nav-links span{ cursor:default; opacity:0.85; }
+  .nav-links span.active{ text-decoration:underline; text-underline-offset:5px; opacity:1; }
+  .nav-actions{
+    display:flex;
+    align-items:center;
+    gap:12px;
+  }
+  .btn-outline{
+    border:1px solid var(--mint-line);
+    background:transparent;
+    color:var(--navy);
+    padding:9px 18px;
+    border-radius:30px;
+    font-size:13.5px;
+    font-weight:600;
+    font-family:var(--font);
+    cursor:default;
+  }
+  .btn-filled-nav{
+    background:var(--mint);
+    color:var(--navy);
+    padding:9px 18px;
+    border-radius:30px;
+    font-size:13.5px;
+    font-weight:600;
+    cursor:default;
+  }
+  .lang-flags{ display:flex; gap:8px; font-size:13px; color:var(--muted); }
+  @media (max-width:860px){
+    .nav-links, .nav-actions{ display:none; }
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{
+    max-width:1280px;
+    margin:0 auto;
+    padding:clamp(24px,5vw,56px) clamp(16px,4vw,48px) 40px;
+    display:grid;
+    grid-template-columns:1fr 1fr;
+    gap:clamp(24px,5vw,60px);
+    align-items:center;
+  }
+  @media (max-width:900px){
+    .hero{ grid-template-columns:1fr; padding-top:8px; }
+  }
+  .hero-copy h1{
+    font-size:clamp(34px,5.4vw,64px);
+    line-height:1.08;
+    font-weight:800;
+    letter-spacing:-0.015em;
+    max-width:560px;
+  }
+  .hero-copy .eyebrow{
+    display:inline-flex;
+    align-items:center;
+    gap:6px;
+    font-size:12px;
+    font-weight:600;
+    color:var(--navy-soft);
+    background:var(--white);
+    border:1px solid var(--mint-line);
+    padding:6px 14px;
+    border-radius:20px;
+    margin-bottom:18px;
+  }
+  .hero-copy .sub{
+    margin-top:16px;
+    font-size:clamp(16px,2vw,19px);
+    font-weight:500;
+    color:var(--navy-soft);
+    max-width:460px;
+  }
+  .cta-row{ margin-top:32px; display:flex; flex-direction:column; align-items:flex-start; gap:12px; }
+  button#start-btn{
+    background:var(--mint);
+    color:var(--navy);
+    border:none;
+    padding:16px 26px;
+    min-height:54px;
+    border-radius:34px;
+    font-family:var(--font);
+    font-size:15px;
+    font-weight:700;
+    letter-spacing:-0.005em;
+    cursor:pointer;
+    touch-action:manipulation;
+    transition:transform 0.2s ease, background 0.2s ease, box-shadow 0.3s ease;
+    box-shadow:0 10px 30px -12px #2a2e6355;
+  }
+  button#start-btn:hover{ background:var(--mint-strong); transform:translateY(-2px); }
+  button#start-btn:active{ transform:translateY(0) scale(0.97); }
+  button#start-btn:disabled{ opacity:0.6; cursor:default; transform:none; }
+  .loading-note{
+    font-size:13px;
+    color:var(--navy-soft);
+    display:flex;
+    align-items:center;
+    gap:8px;
+  }
+  .spinner{
+    width:14px;height:14px;
+    border-radius:50%;
+    border:2px solid var(--mint-line);
+    border-top-color:var(--navy);
+    animation:spin 0.8s linear infinite;
+  }
+  @keyframes spin{ to{ transform:rotate(360deg); } }
+  .microcopy{
+    font-size:12px;
+    color:var(--navy-soft);
+    opacity:0.85;
+    max-width:420px;
+  }
+  .tech-credit{
+    margin-top:26px;
+    font-size:11.5px;
+    color:var(--navy-soft);
+    opacity:0.75;
+    letter-spacing:0.01em;
+  }
+  .tech-credit .label{
+    display:block;
+    text-transform:uppercase;
+    letter-spacing:0.12em;
+    font-size:10px;
+    font-weight:700;
+    margin-bottom:5px;
+    opacity:0.8;
+  }
+
+  /* ---------- HERO CARD (camera stage) ---------- */
+  .hero-card{
+    position:relative;
+    width:100%;
+    max-width:460px;
+    aspect-ratio:4/5;
+    margin:0 auto;
+    border-radius:28px;
+    overflow:hidden;
+    background:linear-gradient(155deg,#eef6f2,#d7e6e0);
+    box-shadow:0 30px 60px -30px #2a2e6340;
+  }
+  .poster{
+    position:absolute;inset:0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    text-align:center;
+    padding:24px;
+    transition:opacity 0.5s ease;
+  }
+  .poster .ring{
+    width:74px;height:74px;
+    border-radius:50%;
+    border:2px solid var(--navy);
+    display:flex;align-items:center;justify-content:center;
+    position:relative;
+  }
+  .poster .ring::after{
+    content:'';
+    position:absolute;inset:-8px;
+    border-radius:50%;
+    border:1px solid var(--mint-strong);
+    animation:ringPulse 2.4s ease-out infinite;
+  }
+  @keyframes ringPulse{
+    0%{ transform:scale(0.85); opacity:0.8; }
+    100%{ transform:scale(1.35); opacity:0; }
+  }
+  .poster p{ font-size:13.5px; color:var(--navy-soft); font-weight:600; max-width:220px; }
+
+  .stage{
+    position:absolute;
+    inset:0;
+    transform:scaleX(-1);
+    opacity:0;
+    transition:opacity 0.4s ease;
+  }
+  .stage.live{ opacity:1; }
+  .stage video, .stage canvas{
+    position:absolute;
+    inset:0;
+    width:100%;
+    height:100%;
+    object-fit:cover;
+  }
+
+  .card-hud{
+    position:absolute;
+    inset:0;
+    pointer-events:none;
+    display:flex;
+    flex-direction:column;
+    justify-content:space-between;
+    padding:16px;
+    opacity:0;
+    transition:opacity 0.4s ease;
+    z-index:3;
+  }
+  .card-hud.live{ opacity:1; }
+  .hud-top{ display:flex; justify-content:space-between; align-items:flex-start; }
+  .angle-gauge{
+    position:relative;
+    width:78px;height:78px;
+    border-radius:50%;
+    display:flex;align-items:center;justify-content:center;
+    background:conic-gradient(var(--teal) calc(var(--progress,0) * 1%), #ffffff30 0);
+  }
+  .angle-gauge::before{
+    content:'';
+    position:absolute;inset:5px;
+    border-radius:50%;
+    background:#0c1a1acc;
+    backdrop-filter:blur(3px);
+  }
+  .hud-angle{
+    position:relative;
+    font-size:19px;
+    font-weight:700;
+    color:var(--teal);
+    line-height:1;
+  }
+  .hud-angle span{ font-size:0.5em; color:#cfe6e1; }
+  .hud-reps{
+    background:#0c1a1acc;
+    border-radius:14px;
+    padding:8px 12px;
+    text-align:right;
+    font-size:11px;
+    color:#cfe6e1;
+    text-transform:uppercase;
+    letter-spacing:0.08em;
+  }
+  .hud-reps b{ display:block; font-size:20px; color:var(--teal); font-weight:700; }
+  .hud-bottom{ text-align:center; }
+  .hud-target{ font-size:10.5px; color:#cfe6e1; text-transform:uppercase; letter-spacing:0.08em; opacity:0.85; }
+  .hud-status{
+    margin-top:4px;
+    font-size:12px;
+    color:#eafff9;
+    background:#0c1a1ab0;
+    display:inline-block;
+    padding:5px 12px;
+    border-radius:14px;
+  }
+
+  .rep-flash{
+    position:absolute;inset:0;
+    background:radial-gradient(ellipse at center, #22d3b855, transparent 70%);
+    opacity:0;
+    pointer-events:none;
+    z-index:4;
+  }
+  .rep-pop{
+    position:absolute;
+    top:40%; left:50%;
+    transform:translate(-50%,-50%) scale(0.7);
+    font-size:clamp(20px,6vw,28px);
+    font-weight:800;
+    color:var(--teal);
+    text-shadow:0 0 24px #22d3b8aa;
+    opacity:0;
+    pointer-events:none;
+    z-index:5;
+  }
+  .rep-pop.show{ animation:repPop 0.9s cubic-bezier(.2,1,.3,1) forwards; }
+  @keyframes repPop{
+    0%{ opacity:0; transform:translate(-50%,-50%) scale(0.6); }
+    30%{ opacity:1; transform:translate(-50%,-50%) scale(1.08); }
+    70%{ opacity:1; transform:translate(-50%,-50%) scale(1); }
+    100%{ opacity:0; transform:translate(-50%,-55%) scale(1); }
+  }
+
+  .badge-honest{
+    position:absolute;
+    left:50%; transform:translateX(-50%);
+    bottom:10px;
+    font-size:9.5px;
+    letter-spacing:0.02em;
+    color:#eafff9;
+    background:#0c1a1ab0;
+    padding:5px 11px;
+    border-radius:20px;
+    z-index:6;
+    opacity:0;
+    transition:opacity 0.4s ease;
+    pointer-events:none;
+  }
+  .badge-honest.live{ opacity:1; }
+
+  .complete-panel{
+    position:absolute;
+    inset:0;
+    background:#0a1616f0;
+    display:flex;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:14px;
+    text-align:center;
+    padding:28px;
+    opacity:0;
+    pointer-events:none;
+    transition:opacity 0.6s ease;
+    z-index:7;
+  }
+  .complete-panel.show{ opacity:1; pointer-events:auto; }
+  .complete-panel h2{
+    font-size:clamp(19px,4.4vw,25px);
+    color:#eafff9;
+    font-weight:700;
+    line-height:1.2;
+  }
+  .complete-panel p{ color:#a9c9c2; font-size:13px; max-width:320px; }
+  .complete-panel a.cta{
+    margin-top:6px;
+    color:#04211c;
+    background:var(--teal);
+    padding:13px 22px;
+    border-radius:34px;
+    text-decoration:none;
+    font-weight:700;
+    font-size:13.5px;
+    touch-action:manipulation;
+  }
+  .complete-panel button.retry{
+    background:none;
+    border:1px solid #ffffff2a;
+    color:#a9c9c2;
+    padding:9px 16px;
+    min-height:38px;
+    border-radius:30px;
+    font-size:11.5px;
+    font-family:var(--font);
+    cursor:pointer;
+    touch-action:manipulation;
+  }
+
+  /* ---------- FALLBACK (inside card) ---------- */
+  .fallback-visual{
+    position:absolute; inset:0;
+    display:none;
+    flex-direction:column;
+    align-items:center;
+    justify-content:center;
+    gap:12px;
+    padding:20px;
+    text-align:center;
+    background:linear-gradient(155deg,#eef6f2,#d7e6e0);
+  }
+  .fallback-visual.show{ display:flex; }
+  .fallback-visual svg{ width:min(220px,60%); height:auto; }
+  .fallback-visual p{ font-size:12.5px; color:var(--navy-soft); max-width:300px; line-height:1.5; }
+
+  /* ---------- FOOTER ---------- */
+  footer{
+    text-align:center;
+    font-size:11px;
+    color:var(--navy-soft);
+    padding:22px 16px 28px;
+    opacity:0.85;
+  }
+</style>
+</head>
+<body>
+
+  <div class="disclosure-bar">Concepto no oficial — reimaginación de <b>trakphysio.com</b> · por carlosmakes.com</div>
+
+  <header class="site-nav">
+    <div class="logo">
+      <svg width="20" height="20" viewBox="0 0 20 20"><circle cx="10" cy="10" r="8" fill="none" stroke="#2a2e63" stroke-width="2.4"/></svg>
+      trak
+    </div>
+    <ul class="nav-links">
+      <li><span class="active">Inicio</span></li>
+      <li><span>Soluciones</span></li>
+      <li><span>Blog</span></li>
+      <li><span>Trabaja con nosotros</span></li>
+    </ul>
+    <div class="nav-actions">
+      <span class="btn-outline">Iniciar sesión</span>
+      <span class="btn-filled-nav">Solicitar info</span>
+      <span class="lang-flags">EN&nbsp;&nbsp;ES</span>
+    </div>
+  </header>
+
+  <section class="hero">
+    <div class="hero-copy">
+      <div class="eyebrow">✨ Impulsada por IA — vista en vivo</div>
+      <h1>La recuperación no se describe. Se ve.</h1>
+      <p class="sub">Pulsa el botón y mira cómo nuestra IA te acompaña, como a un paciente en casa.</p>
+      <div class="cta-row">
+        <button id="start-btn">Pruébalo con tu cámara — 10 segundos, sin registro</button>
+        <p class="loading-note hidden" id="loading-note"><span class="spinner"></span> Preparando la visión artificial…</p>
+        <p class="microcopy">Demo conceptual — no es un producto clínico. Nada se guarda ni se envía: todo ocurre en tu navegador.</p>
+      </div>
+      <div class="tech-credit">
+        <span class="label">Cómo funciona</span>
+        MediaPipe Pose Landmarker (Google), procesado 100% en tu dispositivo — cero backend, cero registro.
+      </div>
+    </div>
+
+    <div class="hero-card" id="hero-card">
+      <div class="poster" id="poster">
+        <div class="ring">
+          <svg width="30" height="30" viewBox="0 0 24 24" fill="none"><path d="M8 5v14l11-7-11-7z" fill="#2a2e63"/></svg>
+        </div>
+        <p>Aquí aparecerá tu cámara con el esqueleto en vivo</p>
+      </div>
+
+      <div class="stage" id="stage">
+        <video id="video" playsinline autoplay muted></video>
+        <canvas id="overlay"></canvas>
+      </div>
+
+      <div class="card-hud" id="card-hud">
+        <div class="hud-top">
+          <div class="angle-gauge" id="angle-gauge">
+            <div class="hud-angle" id="hud-angle">--<span>°</span></div>
+          </div>
+          <div class="hud-reps">Reps<br><b id="hud-reps">0</b>/3</div>
+        </div>
+        <div class="hud-bottom">
+          <div class="hud-target">Objetivo 95°</div>
+          <div class="hud-status" id="hud-status">Buscando cuerpo…</div>
+        </div>
+      </div>
+
+      <div class="rep-flash" id="rep-flash"></div>
+      <div class="rep-pop" id="rep-pop"></div>
+      <div class="badge-honest" id="badge-honest">Demo conceptual — no clínico</div>
+
+      <div class="fallback-visual" id="fallback-visual">
+        <svg viewBox="0 0 200 200">
+          <circle cx="100" cy="30" r="12" fill="none" stroke="#2a2e63" stroke-width="3"/>
+          <line x1="100" y1="42" x2="100" y2="110" stroke="#2a2e63" stroke-width="3"/>
+          <line x1="80" y1="110" x2="120" y2="110" stroke="#2a2e63" stroke-width="3"/>
+          <line x1="80" y1="110" x2="70" y2="180" stroke="#2a2e63" stroke-width="3"/>
+          <line x1="120" y1="110" x2="130" y2="180" stroke="#2a2e63" stroke-width="3"/>
+          <line x1="75" y1="55" x2="125" y2="55" stroke="#2a2e63" stroke-width="3"/>
+          <line x1="75" y1="55" x2="55" y2="95" stroke="#2a2e63" stroke-width="3"/>
+          <line id="fb-armR" x1="125" y1="55" x2="150" y2="35" stroke="#2a2e63" stroke-width="3" stroke-linecap="round"/>
+        </svg>
+        <p>No hemos podido acceder a tu cámara (permiso denegado o dispositivo no compatible). Esta es una animación de muestra del mismo movimiento.</p>
+      </div>
+
+      <div class="complete-panel" id="complete-panel">
+        <h2>Así se demuestra una recuperación. No se describe. Se ve.</h2>
+        <p>Esto es una reimaginación no oficial hecha en horas, no semanas. Imagina esto en vuestra propia portada.</p>
+        <a class="cta" href="https://carlosmakes.com" target="_blank" rel="noopener">Hablemos — carlosmakes.com</a>
+        <button class="retry" id="retry-btn">Repetir la demo</button>
+      </div>
+    </div>
+  </section>
+
+  <footer>Concepto no oficial — reimaginación de trakphysio.com · por carlosmakes.com</footer>
+
+<script type="module">
+import { PoseLandmarker, FilesetResolver } from "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/vision_bundle.mjs";
+
+const startBtn = document.getElementById('start-btn');
+const loadingNote = document.getElementById('loading-note');
+const heroCard = document.getElementById('hero-card');
+const poster = document.getElementById('poster');
+const stage = document.getElementById('stage');
+const video = document.getElementById('video');
+const canvas = document.getElementById('overlay');
+const ctx = canvas.getContext('2d');
+const cardHud = document.getElementById('card-hud');
+const hudAngle = document.getElementById('hud-angle');
+const hudReps = document.getElementById('hud-reps');
+const hudStatus = document.getElementById('hud-status');
+const repFlash = document.getElementById('rep-flash');
+const repPop = document.getElementById('rep-pop');
+const angleGauge = document.getElementById('angle-gauge');
+const badgeHonest = document.getElementById('badge-honest');
+const completePanel = document.getElementById('complete-panel');
+const retryBtn = document.getElementById('retry-btn');
+const fallbackVisual = document.getElementById('fallback-visual');
+
+const TARGET_ANGLE = 95;
+const UP_THRESHOLD = 80;
+const DOWN_THRESHOLD = 25;
+const MAX_REPS = 3;
+
+let poseLandmarker = null;
+let repState = 'down';
+let reps = 0;
+let running = false;
+let canvasCssW = 0, canvasCssH = 0;
+
+startBtn.addEventListener('click', startExperience);
+retryBtn.addEventListener('click', () => {
+  reps = 0;
+  repState = 'down';
+  hudReps.textContent = '0';
+  completePanel.classList.remove('show');
+});
+
+async function startExperience(){
+  const secure = window.isSecureContext;
+  if (!secure) {
+    console.warn('Contexto no seguro: getUserMedia requiere HTTPS o localhost.');
+  }
+  if (!navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) {
+    return goFallback();
+  }
+  startBtn.disabled = true;
+  loadingNote.classList.remove('hidden');
+  try {
+    const stream = await navigator.mediaDevices.getUserMedia({
+      video: { facingMode: 'user', width: { ideal: 1280 }, height: { ideal: 720 } },
+      audio: false
+    });
+    video.srcObject = stream;
+    await video.play();
+    await initPose();
+    loadingNote.classList.add('hidden');
+    poster.style.opacity = '0';
+    stage.classList.add('live');
+    cardHud.classList.add('live');
+    badgeHonest.classList.add('live');
+    resizeCanvas();
+    window.addEventListener('resize', resizeCanvas);
+    running = true;
+    requestAnimationFrame(renderLoop);
+  } catch (err) {
+    console.warn('No se pudo acceder a la cámara:', err);
+    loadingNote.classList.add('hidden');
+    startBtn.disabled = false;
+    goFallback();
+  }
+}
+
+function resizeCanvas(){
+  const rect = heroCard.getBoundingClientRect();
+  const dpr = window.devicePixelRatio || 1;
+  canvasCssW = rect.width;
+  canvasCssH = rect.height;
+  canvas.width = Math.round(canvasCssW * dpr);
+  canvas.height = Math.round(canvasCssH * dpr);
+  ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+}
+
+async function initPose(){
+  const vision = await FilesetResolver.forVisionTasks(
+    "https://cdn.jsdelivr.net/npm/@mediapipe/tasks-vision@0.10.14/wasm"
+  );
+  poseLandmarker = await PoseLandmarker.createFromOptions(vision, {
+    baseOptions: {
+      modelAssetPath: "https://storage.googleapis.com/mediapipe-models/pose_landmarker/pose_landmarker_lite/float16/1/pose_landmarker_lite.task",
+      delegate: "GPU"
+    },
+    runningMode: "VIDEO",
+    numPoses: 1
+  });
+}
+
+function renderLoop(){
+  if (!running) return;
+  if (poseLandmarker && video.readyState >= 2) {
+    const result = poseLandmarker.detectForVideo(video, performance.now());
+    draw(result);
+  }
+  requestAnimationFrame(renderLoop);
+}
+
+// Maps normalized video-space landmarks into the canvas's CSS pixel space,
+// replicating the same crop/scale that object-fit:cover applies to <video>.
+function getCoverTransform(){
+  const vw = video.videoWidth, vh = video.videoHeight;
+  if (!vw || !vh || !canvasCssW || !canvasCssH) return null;
+  const scale = Math.max(canvasCssW / vw, canvasCssH / vh);
+  const drawnW = vw * scale, drawnH = vh * scale;
+  return { scale, offsetX: (canvasCssW - drawnW) / 2, offsetY: (canvasCssH - drawnH) / 2 };
+}
+
+function toXY(landmark, t){
+  return {
+    x: t.offsetX + landmark.x * video.videoWidth * t.scale,
+    y: t.offsetY + landmark.y * video.videoHeight * t.scale
+  };
+}
+
+function draw(result){
+  ctx.clearRect(0, 0, canvasCssW, canvasCssH);
+  const landmarks = result.landmarks && result.landmarks[0];
+  const t = getCoverTransform();
+  if (!landmarks || !t) {
+    hudStatus.textContent = 'Buscando cuerpo…';
+    hudAngle.innerHTML = '--<span>°</span>';
+    angleGauge.style.setProperty('--progress', 0);
+    return;
+  }
+  drawSkeleton(landmarks, t);
+  const angleInfo = computeShoulderAngle(landmarks);
+  if (angleInfo === null) {
+    hudStatus.textContent = 'Colócate de frente, brazo visible';
+    hudAngle.innerHTML = '--<span>°</span>';
+    angleGauge.style.setProperty('--progress', 0);
+    return;
+  }
+  hudStatus.textContent = reps >= MAX_REPS ? '¡Serie completada!' : 'Eleva el brazo lateralmente';
+  hudAngle.innerHTML = Math.round(angleInfo) + '<span>°</span>';
+  const progress = Math.max(0, Math.min(100, (angleInfo / TARGET_ANGLE) * 100));
+  angleGauge.style.setProperty('--progress', progress);
+  updateReps(angleInfo);
+}
+
+const CONNECTIONS = [
+  [11,12],[11,13],[13,15],[12,14],[14,16],
+  [11,23],[12,24],[23,24],
+  [23,25],[25,27],[24,26],[26,28]
+];
+
+function drawSkeleton(landmarks, t){
+  ctx.strokeStyle = '#22d3b8';
+  ctx.lineWidth = 3.5;
+  ctx.fillStyle = '#eafff9';
+  CONNECTIONS.forEach(([a,b]) => {
+    const p1 = landmarks[a], p2 = landmarks[b];
+    if (!p1 || !p2) return;
+    const c1 = toXY(p1, t), c2 = toXY(p2, t);
+    ctx.beginPath();
+    ctx.moveTo(c1.x, c1.y);
+    ctx.lineTo(c2.x, c2.y);
+    ctx.stroke();
+  });
+  [11,12,13,14,15,16,23,24].forEach(i => {
+    const p = landmarks[i];
+    if (!p) return;
+    const c = toXY(p, t);
+    ctx.beginPath();
+    ctx.arc(c.x, c.y, 4.5, 0, Math.PI*2);
+    ctx.fill();
+  });
+}
+
+function computeShoulderAngle(landmarks){
+  const sides = [
+    { shoulder: 12, elbow: 14, hip: 24 },
+    { shoulder: 11, elbow: 13, hip: 23 }
+  ];
+  let best = null, bestVis = 0;
+  sides.forEach(s => {
+    const sh = landmarks[s.shoulder], el = landmarks[s.elbow], hp = landmarks[s.hip];
+    if (!sh || !el || !hp) return;
+    const vis = (sh.visibility||0) + (el.visibility||0) + (hp.visibility||0);
+    if (vis > bestVis) { bestVis = vis; best = { sh, el, hp }; }
+  });
+  if (!best || bestVis < 1.5) return null;
+  const { sh, el, hp } = best;
+  const v1 = { x: hp.x - sh.x, y: hp.y - sh.y };
+  const v2 = { x: el.x - sh.x, y: el.y - sh.y };
+  const dot = v1.x*v2.x + v1.y*v2.y;
+  const mag1 = Math.hypot(v1.x, v1.y);
+  const mag2 = Math.hypot(v2.x, v2.y);
+  if (mag1 === 0 || mag2 === 0) return null;
+  let cos = dot / (mag1 * mag2);
+  cos = Math.max(-1, Math.min(1, cos));
+  return Math.acos(cos) * 180 / Math.PI;
+}
+
+function updateReps(angle){
+  if (reps >= MAX_REPS) return;
+  if (repState === 'down' && angle >= UP_THRESHOLD) {
+    repState = 'up';
+  } else if (repState === 'up' && angle <= DOWN_THRESHOLD) {
+    repState = 'down';
+    reps++;
+    hudReps.textContent = reps;
+    celebrateRep(reps);
+    if (reps >= MAX_REPS) {
+      setTimeout(() => completePanel.classList.add('show'), 700);
+    }
+  }
+}
+
+function celebrateRep(count){
+  flashCelebration();
+  repPop.textContent = count >= MAX_REPS ? '¡Serie completa!' : `Rep ${count}/${MAX_REPS}`;
+  repPop.classList.remove('show');
+  void repPop.offsetWidth;
+  repPop.classList.add('show');
+}
+
+function flashCelebration(){
+  repFlash.style.transition = 'none';
+  repFlash.style.opacity = '0.7';
+  requestAnimationFrame(() => {
+    repFlash.style.transition = 'opacity 0.6s ease';
+    repFlash.style.opacity = '0';
+  });
+}
+
+function goFallback(){
+  running = false;
+  poster.style.opacity = '0';
+  fallbackVisual.classList.add('show');
+  badgeHonest.classList.add('live');
+  animateFallbackSkeleton();
+}
+
+function animateFallbackSkeleton(){
+  const armR = document.getElementById('fb-armR');
+  let t = 0;
+  function loop(){
+    if (fallbackVisual.classList.contains('show')) {
+      t += 0.03;
+      const lift = (Math.sin(t) + 1) / 2;
+      const rad = lift * 90 * Math.PI/180;
+      const len = 45;
+      const x = 125 + Math.cos(Math.PI - rad) * len;
+      const y = 55 - Math.sin(rad) * len;
+      armR.setAttribute('x2', x.toFixed(1));
+      armR.setAttribute('y2', y.toFixed(1));
+    }
+    requestAnimationFrame(loop);
+  }
+  loop();
+}
+</script>
+</body>
+</html>
